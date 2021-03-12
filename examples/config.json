@@ -3,5 +3,5 @@
   "assignment": "Project 1",
   "output_file": "canvas-converter/examples/output.canvas",
   "grades": "canvas-converter/examples/grades.txt",
-  "partners": "canvas-converter/exmaples/partners.csv"
+  "partners": "canvas-converter/exmaples/partners.csv" # if no partners remove this line completely
 }
