@@ -2,6 +2,12 @@
 
 ## Convert raw txt files to Canvas approved CSVs!
 
+## Requirements
+
+Python 3.8+
+
+`pip install pandas json argparse`
+
 ## Usage
 
 This script is used to convert raw grades txt files to files that can be uploaded to Canvas. It also has the
