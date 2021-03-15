@@ -58,16 +58,14 @@ class Partners:
         # If this dictionary is not empty we have a problem. Print out the troublemakers and exit with error code.
         no_partners = dict(filter(lambda elem: elem[1] not in d or d[elem[1]] != elem[0], d.items()))
 
-        # TODO: Still undecided what to do in this case. For now just dump the troublemakers and get out. Let user
-        # fix it.
+        # TODO: Still undecided what to do in this case. For now just dump the troublemakers so grader is aware.
         if len(no_partners) != 0:
-            print(f"{BColors.FAIL} Error! Unmatched students in partner form:")
+            print(f"{BColors.WARNING} Warning! Asymmetric partners:")
             for (k, v) in no_partners.items():
                 print(k, v)
             print(f"{BColors.ENDC}")
-            exit(1)
 
-        # Set our intance variable to the dictionary of partners
+        # Set our instance variable to the dictionary of partners
         self._partners = d
 
     def as_dict(self):
@@ -190,7 +188,7 @@ class Grades:
         """
 
         # Expect the file to be delimited by either tabs or commas.
-        self._df = pd.read_csv(csv, sep='\t|,', engine='python', skipinitialspace=True)
+        self._df = pd.read_csv(csv, sep='\t|,', engine='python', skipinitialspace=True, header=None)
 
         # Add columns because the raw txt file doesn't have them.
         self._df.columns = ["student", "score"]
@@ -225,17 +223,17 @@ class Grades:
             partner = partners[student]
 
             # Lookup score we are going to assign to the partner
-            student_score =  self._df.loc[student]["score"]
+            student_score = self._df.loc[student]["score"]
 
             # Partner does not exist in the current DataFrame.
             # We need to create an entry for the partner with the score.
-            if partner not in  self._df.index:
-                new_df = partner_df.append({"student": partner, "score": student_score}, ignore_index=True)
+            if partner not in self._df.index:
+                partner_df = partner_df.append({"student": partner, "score": student_score}, ignore_index=True)
                 continue
 
             # TODO: Should we notify when this happens?
             # If we get here, both the partner and the student submitted code. Get the minimum and assign to both.
-            partner_score =  self._df.loc[partner]["score"]
+            partner_score = self._df.loc[partner]["score"]
             self._df.loc[student]["score"] = min(student_score, partner_score)
             self._df.loc[partners[student]]["score"] = min(student_score, partner_score)
 
@@ -276,8 +274,8 @@ class CanvasWriter:
         :return: None
         """
         with open(output_file, 'w') as writer:
-            writer.write(f", {assignment_name}\n")
-            writer.write(f"Points Possible, {points_possible}\n")
+            writer.write(f",{assignment_name}\n")
+            writer.write(f"Points Possible,{points_possible}\n")
             grades.write(writer)
 
 
