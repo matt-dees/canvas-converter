@@ -178,7 +178,7 @@ class Grades:
     def __init__(self, csv):
         """
         Creates a Grades object from a "csv". "csv" in quotes because it's not really a CSV file. It is separated by
-        spaces and doesn't really have column headers. For example,
+        tabs and doesn't really have column headers. For example,
 
         student1 8.0
         student2 0.0
@@ -188,7 +188,9 @@ class Grades:
         "csv".
         :param csv: grades.txt RAW file that will be used to fill in this object.
         """
-        self._df = pd.read_csv(csv, delim_whitespace=True)
+
+        # Expect the file to be delimited by either tabs or commas.
+        self._df = pd.read_csv(csv, sep='\t|,', engine='python', skipinitialspace=True)
 
         # Add columns because the raw txt file doesn't have them.
         self._df.columns = ["student", "score"]
